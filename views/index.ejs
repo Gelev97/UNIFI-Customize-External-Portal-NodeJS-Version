@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- link rel="stylesheet" href="style.css" type="text/css" -->
+    <style>
+    	.container {
+        	margin-left: auto;
+            margin-right: auto;
+            max-width: 800px;
+            text-align: center;
+        }
+        .form-component {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .hint-info{
+            margin: auto;
+            font-size: 15px;
+            color:red;
+            padding: 2px;
+            width: 200px;
+            display: none;
+        }
+        #terms {
+            margin: auto;
+            display:none;
+            margin-top: 6px;
+            margin-bottom: 4px;
+            padding: 2px;
+        }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+    	<h2>Sign up to connect</h2>
+        <form action="/auth-server" method="post" onsubmit="" id="the-form">
+	    <input type = "hidden" name = mac value = <%= id %> />
+            <input class="form-component" type="text" id="email" name="email" value="" placeholder="Your email address" oninput="onInput(this.value)" autofocus><br>
+            <p class="hint-info" id="invaild-email-address">*Invalid email address</p>
+            <input class="form-component" type="checkbox" name="accept" value="Accept" id="agree" onclick="handleClick(this)">
+                I agree to the <a href="#" onclick="toggleShowTerms()">Terms and Conditions</a><br>
+            <p class="hint-info" id="uncheckedMess">*Please indicate that you have read and agree to the Terms and Conditions and Privacy Policy </p>
+            <textarea id="terms" rows="10"cols="40" readonly>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit urna a egestas mattis. Sed interdum maximus libero, id faucibus tellus convallis at. Vestibulum tincidunt tincidunt augue, ac ultrices ante consectetur at. Maecenas varius lorem sit amet quam condimentum, sit amet vulputate nunc rutrum. Vestibulum molestie ante eget ornare auctor. Donec fringilla metus at arcu egestas, eget malesuada nulla pulvinar. Nullam nec dignissim augue, id posuere diam. Sed enim justo, finibus ut rhoncus vitae, imperdiet in enim. Donec condimentum viverra consectetur.
+                Phasellus ultrices rutrum purus, ornare condimentum magna eleifend id. Phasellus viverra suscipit augue, in tempor erat bibendum nec. Duis tempor convallis tincidunt. Vivamus eget sapien vitae sem bibendum congue rhoncus vitae turpis. Praesent ut lorem interdum, fringilla orci id, porta diam. Morbi quis dignissim libero. Proin bibendum at sem nec ullamcorper. Praesent ex arcu, lobortis eget nisi vel, vestibulum malesuada dolor.
+                Nam aliquam turpis vel tortor consequat ultrices. Donec tincidunt, erat nec porttitor cursus, risus leo volutpat leo, ac condimentum leo ante venenatis urna. Nunc aliquet faucibus nibh, dapibus finibus lectus cursus vitae. Vivamus tincidunt, mi eu porttitor finibus, urna urna aliquam lectus, in sagittis dolor est sed mauris. Morbi porta felis at rutrum dignissim. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec laoreet condimentum condimentum. Donec sit amet nibh vestibulum, maximus tellus et, maximus justo.
+            </textarea>
+            <input class="form-component" type="submit" value="Connect" onclick="validateAndSubmit(event)">
+        </form>
+    </div>
+  </body>
+  <script>
+
+    showTerms = false;
+    emailEntered = false;
+    function toggleShowTerms() {
+        showTerms = !showTerms;
+        document.getElementById('terms').style.display = showTerms ? 'block' : 'none';
+    }
+
+    function handleClick(cb) {
+        if(cb.checked) {
+            document.getElementById("uncheckedMess").style.display = 'none';
+            return true;
+        } else {
+            document.getElementById("uncheckedMess").style.display = 'block';
+            return false;
+        }
+    }
+    function validateAndSubmit(event) {
+        event.preventDefault();
+        var email = document.getElementById('email').value;
+        var emailValid = false;
+        if (email === '') {
+            document.getElementById("invaild-email-address").style.display = 'block';
+            emailValid = false;
+        } else {
+            emailValid = true;
+        }
+        var termsAgreed = document.getElementById('agree').checked;
+        if(!termsAgreed) {
+            document.getElementById("uncheckedMess").style.display = 'block';
+        }
+        if (emailValid && termsAgreed) {
+            document.getElementById('the-form').submit();
+        }
+    }
+
+    function onInput(email) {
+        var regex = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        var errorMess = document.getElementById("invaild-email-address");
+        emailEntered = email !== '';
+        if (!regex.test(email)) {
+            errorMess.style.display = 'block';
+            return false;
+        } else {
+            errorMess.style.display = 'none';
+            return true;
+        }
+    }
+
+  </script>
+</html>
